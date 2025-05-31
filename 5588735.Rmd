@@ -1,0 +1,105 @@
+---
+title: 'Business Statistics Mid-Term Assessment IB94X0 2024-2025 #1'
+author: '5588735'
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Section 1
+
+```{r setup, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+options(width=100)
+
+```
+
+# Loading in the Data
+```{r}
+York <- read_csv("York_Footfall_data.csv")
+
+```
+
+# Checking the data integrity/quality
+```{r}
+missing_data <- colSums(is.na(York))
+missing_data
+
+clean_data <- York %>%
+  filter(TotalCount < 55000)
+clean_data
+
+```
+
+# A summary table that shows the date of first and last day / daily mean footfall / standard deviation / highest and lowest daily footfall for each location
+```{r}
+#First_day <- min(York$Date)
+#Last_day <- max(York$Date)
+
+York_summary_table <- clean_data %>% group_by(LocationName) %>% 
+  summarise(First_day = min(Date, na.rm=TRUE), 
+            Last_day = max(Date, na.rm=TRUE), 
+            mean_footfall=mean(TotalCount, na.rm=TRUE), 
+            footfall_sd=sd(TotalCount, na.rm=TRUE),
+            highest_daily_footfall=max(TotalCount, na.rm=TRUE), 
+            lowest_daily_footfall=min(TotalCount, na.rm=TRUE))
+view(York_summary_table)
+
+```
+
+# The distribution of footfall across all days, seperated by locations (Plot)
+```{r}
+
+York_2019 <- clean_data %>% filter(year(Date)==2019)
+York_2019
+
+
+York_2019 <- mutate(York_2019,WeekDay=factor(WeekDay,levels=c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")))
+
+ggplot(data = York_2019) + geom_histogram(aes(TotalCount)) + facet_grid(LocationName ~ WeekDay)
+
+
+```
+
+# T-test to compare the footfall on Coney Street to Stonegate
+```{r}
+
+York_t_test <- York_2019 %>% filter(LocationName %in% c("Coney Street", "Stonegate"))
+t.test(TotalCount~LocationName, data=York_t_test)
+
+
+```
+
+# Additional t-test to compare the footfall on Coney Street to Stonegate (Only on weekends)
+```{r}
+York_add_t_test <- York_2019 %>% filter(LocationName %in% c("Coney Street", "Stonegate") & WeekDay %in% c("Saturday", "Sunday"))
+       
+t.test(TotalCount~LocationName, data=York_add_t_test)
+
+```
+
+
+# Advise to maximise the number of passers
+
+On weekdays, they should place their stall on Coney Street since it has a higher footfall mean. On the other hand, on weekends, they should place their stall on Stonegrate Street as it shows a higher mean of footfall. 
+
+# Section 2 
+
+This report shows the results of the footfall data collected in York. First, the quality of the data was checked. It was found that there are 10 missing values in the "TotalCount" column and 100 missing values in the "Recording_ID" column.
+Also, upon checking the data there were some inaccurate/unreliable values in TotalCount at the end of 2017 specifically in Micklegate and Stonegate. Thus, data-cleaning was applied.
+
+A summary table was created to show key details about footfall measurements. This table highlights the first and last days when footfall was measured at different locations in York. It also includes the average (mean) and standard deviation for each location, helping to understand footfall patterns. The table shows the highest and lowest daily footfall counts for six different sites.
+
+In addition, a t-test was conducted to compare footfall numbers between two specific locations (Coney Street & Stonegate). The results were significant because the p-value was less than 0.05. This means that the null hypothesis of the t-test is rejected, indicating a real difference in footfall between these locations.
+
+
+Finally, another t-test focused only on footfall data from weekends. In this case, the results were not significant, with a p-value greater than 0.05. Therefore, the null hypothesis for this additional t-test is accepted, suggesting no significant difference in weekend footfall between the locations analysed.
+
