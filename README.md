@@ -1,8 +1,6 @@
 # WBS-Business-Statistics-Assignment-York-Footfall-Data
 
-## York Footfall Data Analysis
-
-## Project Overview
+## York Footfall Data Analysis - Project Overview
 
 This project focuses on analyzing footfall data in York to determine the optimal location for placing a promotional stall. As a promoter, your goal is to select a site that maximizes passerby exposure. By leveraging daily footfall data collected from cameras at various locations, you will identify which spot attracts the most foot traffic.
 
