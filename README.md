@@ -1,4 +1,3 @@
-# WBS-Business-Statistics-Assignment-York-Footfall-Data
 
 ## York Footfall Data Analysis - Project Overview
 
