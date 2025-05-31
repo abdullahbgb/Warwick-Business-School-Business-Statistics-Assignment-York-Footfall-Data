@@ -1,1 +1,1 @@
-# Warwick-Business-School-Business-Statistics-Assignment-York-Footfall-Data
+# WBS-Business-Statistics-Assignment-York-Footfall-Data
